@@ -19,7 +19,9 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBar(
         title: TextField(controller: _controller),
-       floatingActionButton: FloatingActionButton
+        backgroundColor: const Color.fromARGB(255, 66, 1, 1),
+      ),
+       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.save),
         onPressed: () async {
           print(_controller.text);
