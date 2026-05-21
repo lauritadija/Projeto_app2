@@ -1,21 +1,34 @@
 import 'package:flutter/material.dart';
 
-// 1. Lista estática de livros (colocada aqui para o primeiro momento)
-final List<Map<String, String>> staticBooks = [
+// Lista estática de livros traduzida e expandida para preencher a grade (Grid)
+final List<Map<String, String>> listaLivrosEstaticos = [
   {
-    'title': 'O Senhor dos Anéis',
-    'author': 'J.R.R. Tolkien',
-    'description': 'A jornada épica para destruir o Um Anel e derrotar Sauron.',
+    'titulo': 'O Senhor dos Anéis',
+    'autor': 'J.R.R. Tolkien',
+    'categoria': 'Fantasia',
+    'progresso': '45%',
+    'descricao': 'A jornada épica para destruir o Um Anel e derrotar Sauron.',
   },
   {
-    'title': '1984',
-    'author': 'George Orwell',
-    'description': 'Uma das mais impressionantes distopias do século XX sobre vigilância estatal.',
+    'titulo': '1984',
+    'autor': 'George Orwell',
+    'categoria': 'Distopia',
+    'progresso': '80%',
+    'descricao': 'Uma impressionante crítica sobre vigilância estatal e autoritarismo.',
   },
   {
-    'title': 'Dom Casmurro',
-    'author': 'Machado de Assis',
-    'description': 'O clássico mistério sobre o amor e os ciúmes de Bentinho e Capitu.',
+    'titulo': 'Dom Casmurro',
+    'autor': 'Machado de Assis',
+    'categoria': 'Clássico',
+    'progresso': '10%',
+    'descricao': 'O clássico mistério sobre o amor e os ciúmes de Bentinho e Capitu.',
+  },
+  {
+    'titulo': 'O Hobbit',
+    'autor': 'J.R.R. Tolkien',
+    'categoria': 'Fantasia',
+    'progresso': '0%',
+    'descricao': 'Bilbo Bolseiro sai de sua vida pacata em uma aventura inesperada.',
   },
 ];
 
@@ -24,105 +37,209 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Armazenando a cor de fundo para usar no Scaffold e no AppBar uniformemente
-    const backgroundColor = Color.fromARGB(255, 249, 246, 226);
+    // Definição das cores baseadas na sua escolha off-white/creme
+    const corFundo = Color.fromARGB(255, 249, 246, 226);
+    const corPrimaria = Colors.brown;
+    final larguraTela = MediaQuery.of(context).size.width;
+
+    // Define o número de colunas na grade baseado na largura da tela (efeito responsivo de site)
+    int colunasGrade = larguraTela > 900 ? 4 : (larguraTela > 600 ? 3 : 2);
 
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: corFundo,
       appBar: AppBar(
-        backgroundColor: backgroundColor,
-        elevation: 0, // Remove a sombra para um design mais limpo e plano
+        backgroundColor: corFundo,
+        elevation: 0,
+        centerTitle: false,
         title: Image.asset(
-          "logotipo_vp.png", // Dica: certifique-se de que está declarado no pubspec.yaml
+          "logotipo_vp.png",
           fit: BoxFit.contain,
-          height: 40,
+          height: 38,
         ),
+        // Menu de navegação estilo site no topo direito
         actions: [
-          // 2. Botão de perfil para gerenciar os dados do usuário (CRUD SQLite)
+          if (larguraTela > 600) ...[
+            TextButton(
+              onPressed: () {},
+              child: const Text("Início", style: TextStyle(color: corPrimaria, fontWeight: FontWeight.bold)),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text("Minhas Histórias", style: TextStyle(color: Colors.black54)),
+            ),
+            TextButton(
+              onPressed: () {},
+              child: const Text("Chat", style: TextStyle(color: Colors.black54)),
+            ),
+          ],
+          const SizedBox(width: 16),
+          // Botão do Perfil (onde rodará o CRUD de atualizar/excluir conta do SQLite)
           IconButton(
-            icon: const Icon(Icons.account_circle, size: 30, color: Colors.brown),
+            icon: const Icon(Icons.account_circle_outlined, size: 28, color: corPrimaria),
             onPressed: () {
-              // TODO: Navegar para a tela de Perfil / Configurações do Usuário
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Navegar para o Perfil (Editar/Excluir conta)')),
-              );
+              // Ação para abrir a tela de gerenciamento de usuário
             },
           ),
+          const SizedBox(width: 8),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Sua Estante",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-                color: Colors.brown,
+            // Banner de Destaque (Estilo Seção Hero de Sites)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: corPrimaria.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: corPrimaria.withOpacity(0.2)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Bem-vindo de volta à sua biblioteca",
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: corPrimaria,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Explore novas histórias autorais ou continue sua leitura de onde parou.",
+                    style: TextStyle(fontSize: 14, color: Colors.brown[900]),
+                  ),
+                ],
               ),
             ),
+            const SizedBox(height: 32),
+
+            // Título da Seção e Filtros
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                const Text(
+                  "Sua Estante",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {},
+                  child: const Text("Ver todos", style: TextStyle(color: corPrimaria)),
+                ),
+              ],
+            ),
             const SizedBox(height: 16),
-            
-            // 3. Lista dinâmica baseada nos dados estáticos
-            Expanded(
-              child: ListView.builder(
-                itemCount: staticBooks.length,
-                itemBuilder: (context, index) {
-                  final book = staticBooks[index];
-                  return Card(
-                    margin: const EdgeInsets.only(bottom: 14),
-                    elevation: 1,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(12),
-                      // Simulando a capa do livro com um container colorido
-                      leading: Container(
-                        width: 50,
-                        height: 75,
-                        decoration: BoxDecoration(
-                          color: Colors.brown[100],
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: const Icon(Icons.book, color: Colors.brown),
-                      ),
-                      title: Text(
-                        book['title']!,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 16,
-                        ),
-                      ),
-                      subtitle: Padding(
-                        padding: const EdgeInsets.only(top: 4.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              book['author']!,
-                              style: TextStyle(color: Colors.grey[700], fontSize: 13),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              book['description']!,
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(fontSize: 12, color: Colors.black54),
-                            ),
-                          ],
-                        ),
-                      ),
-                      trailing: const Icon(Icons.arrow_forward_ios, size: 14, color: Colors.grey),
-                      onTap: () {
-                        // TODO: Evento para abrir a leitura do livro
-                      },
-                    ),
-                  );
-                },
+
+            // Grade de Livros Dinâmica e Responsiva
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: listaLivrosEstaticos.length,
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: colunasGrade,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.65, // Proporção vertical ideal para capas de livros
               ),
+              itemBuilder: (context, index) {
+                final livro = listaLivrosEstaticos[index];
+                return InkWell(
+                  onTap: () {
+                    // Ação ao clicar no livro
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.04),
+                          blurRadius: 6,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Simulação da Capa do Livro
+                        Expanded(
+                          child: Container(
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: corPrimaria.withOpacity(0.15),
+                              borderRadius: const BorderRadius.vertical(top: Radius.circular(12)),
+                            ),
+                            child: const Icon(
+                              Icons.book_rounded,
+                              size: 48,
+                              color: corPrimaria,
+                            ),
+                          ),
+                        ),
+                        // Informações do Livro
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                livro['titulo']!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                livro['autor']!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.black54,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              // Barra de progresso de leitura simulada (Histórico)
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(4),
+                                      child: LinearProgressIndicator(
+                                        value: double.parse(livro['progresso']!.replaceAll('%', '')) / 100,
+                                        backgroundColor: Colors.grey[200],
+                                        color: corPrimaria,
+                                        minHeight: 5,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    livro['progresso']!,
+                                    style: const TextStyle(fontSize: 10, color: Colors.black45),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
             ),
           ],
         ),
