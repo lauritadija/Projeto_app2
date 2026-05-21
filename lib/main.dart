@@ -1,8 +1,7 @@
-import 'package:aula15_/pages/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto_final/pages/homepage.dart';
 
 void main() {
-  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MainApp());
 }
 
@@ -11,7 +10,7 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: HomePage()
     );
