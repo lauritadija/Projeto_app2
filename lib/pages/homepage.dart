@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:projeto_final/repository/books.dart';
-import 'package:projeto_final/widgets/bottombar.dart';
+import 'package:projeto_livros/repository/books.dart';
+import 'package:projeto_livros/widgets/bottombar.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -21,36 +21,43 @@ class HomePage extends StatelessWidget {
         backgroundColor: corFundo,
         elevation: 0,
         centerTitle: false,
-        title: Image.asset(
-          "logotipo_vp.png",
-          fit: BoxFit.contain,
-          height: 38,
-        ),
+        title: Image.asset('assets/icons/logo.jpg', height: 60),
         // Menu de navegação estilo site no topo direito
         actions: [
           if (larguraTela > 600) ...[
             TextButton(
               onPressed: () {},
-              child: const Text("Início",
-                  style: TextStyle(
-                      color: corPrimaria, fontWeight: FontWeight.bold)),
+              child: const Text(
+                "Início",
+                style: TextStyle(
+                  color: corPrimaria,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
             TextButton(
               onPressed: () {},
-              child: const Text("Minhas Histórias",
-                  style: TextStyle(color: Colors.black54)),
+              child: const Text(
+                "Minhas Histórias",
+                style: TextStyle(color: Colors.black54),
+              ),
             ),
             TextButton(
               onPressed: () {},
-              child:
-                  const Text("Chat", style: TextStyle(color: Colors.black54)),
+              child: const Text(
+                "Chat",
+                style: TextStyle(color: Colors.black54),
+              ),
             ),
           ],
           const SizedBox(width: 16),
           // Botão do Perfil (onde rodará o CRUD de atualizar/excluir conta do SQLite)
           IconButton(
-            icon: const Icon(Icons.account_circle_outlined,
-                size: 28, color: corPrimaria),
+            icon: const Icon(
+              Icons.account_circle_outlined,
+              size: 28,
+              color: corPrimaria,
+            ),
             onPressed: () {
               // Ação para abrir a tela de gerenciamento de usuário
             },
@@ -107,8 +114,10 @@ class HomePage extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () {},
-                  child: const Text("Ver todos",
-                      style: TextStyle(color: corPrimaria)),
+                  child: const Text(
+                    "Ver todos",
+                    style: TextStyle(color: corPrimaria),
+                  ),
                 ),
               ],
             ),
@@ -128,7 +137,7 @@ class HomePage extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final livro = BooksRepository.listaLivrosEstaticos;
-                
+
                 return InkWell(
                   onTap: () {
                     // Ação ao clicar no livro
@@ -155,7 +164,8 @@ class HomePage extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: corPrimaria.withOpacity(0.15),
                               borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(12)),
+                                top: Radius.circular(12),
+                              ),
                             ),
                             child: const Icon(
                               Icons.book_rounded,
@@ -197,8 +207,12 @@ class HomePage extends StatelessWidget {
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(4),
                                       child: LinearProgressIndicator(
-                                        value: double.parse(livro[index]['progresso'].toString()
-                                                .replaceAll('%', '')) /
+                                        value:
+                                            double.parse(
+                                              livro[index]['progresso']
+                                                  .toString()
+                                                  .replaceAll('%', ''),
+                                            ) /
                                             100,
                                         backgroundColor: Colors.grey[200],
                                         color: corPrimaria,
@@ -210,7 +224,9 @@ class HomePage extends StatelessWidget {
                                   Text(
                                     livro[index]['categoria'].toString(),
                                     style: const TextStyle(
-                                        fontSize: 10, color: Colors.black45),
+                                      fontSize: 10,
+                                      color: Colors.black45,
+                                    ),
                                   ),
                                 ],
                               ),
